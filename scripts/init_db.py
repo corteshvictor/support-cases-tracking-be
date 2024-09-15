@@ -2,7 +2,6 @@ from db_connection import get_db_connection, create_database
 from create_tables import create_tables
 from insert_data import insert_sample_data
 
-
 def execute_sql_commands(commands):
     conn = None
     try:
