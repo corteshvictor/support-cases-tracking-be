@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 
-from support_cases.domain.support_cases_entity import SupportCases, SupportCasesCreate
+from support_cases.domain.support_cases_entity import SupportCasesCreate
 from support_cases.application.support_cases_usecase import SupportCasesUseCase
 from .support_cases_mapper import map_to_support_cases
 

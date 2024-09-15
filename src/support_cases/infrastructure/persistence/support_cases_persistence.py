@@ -7,8 +7,6 @@ class SupportCasesPersistenceRepository(SupportCasesRepository):
         self.conn = DBConnection().get_connection()
     
     def create(self, support_case: SupportCasesCreate) -> SupportCases:
-        print('support_casa.number', support_case.number)
-        print('support_casa.status', support_case.status.value)
         with self.conn.cursor() as cursor:
             cursor.execute(
                 """
@@ -57,12 +55,11 @@ class SupportCasesPersistenceRepository(SupportCasesRepository):
             "data": cursor.fetchall()
         }
     
-    def get_by_id(self, support_case_id: int) -> list:
+    def get_by_id(self, id: int) -> list:
         cursor = self.conn.cursor()
         cursor.execute(
-            "SELECT * FROM support_cases WHERE id = %s", (support_case_id,)
+            "SELECT * FROM support_cases WHERE id = %s", (id,)
         )
-        print('support_case_id', support_case_id)
         
         return cursor.fetchone()
     
