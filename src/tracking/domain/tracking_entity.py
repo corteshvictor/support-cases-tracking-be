@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from datetime import datetime
 
 class TrackingCreate(BaseModel):
+    support_case_id: int
     description: str
     affected_table: Optional[str]
     affected_column: Optional[str]

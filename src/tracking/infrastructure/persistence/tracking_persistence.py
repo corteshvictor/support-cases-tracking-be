@@ -1,6 +1,8 @@
 from config.db_connection import DBConnection
+from tracking.domain.tracking_entity import Tracking, TrackingCreate
+from tracking.domain.tracking_repository import TrackingRepository
 
-class TrackingPersistenceRepository():
+class TrackingPersistenceRepository(TrackingRepository):
   def __init__(self):
     self.conn = DBConnection().get_connection()
   
@@ -29,7 +31,38 @@ class TrackingPersistenceRepository():
     }
   
   def get_by_id(self, id: int):
-    return {"message": "Get by id tracking Persistence Repository", "id":id}
+    cursor = self.conn.cursor()
+    cursor.execute(
+        "SELECT * FROM tracking WHERE id = %s", (id,)
+    )
+
+    return cursor.fetchone()
   
-  def create(self, tracking):
-    return {"message": "Create tracking Persistence Repository", "tracking":tracking}
+  def create(self, tracking: TrackingCreate) -> Tracking:
+    with self.conn.cursor() as cursor:
+      
+      cursor.execute(
+          """
+          INSERT INTO tracking (support_case_id, description, affected_table, affected_column, affected_row_id, old_value, new_value, updated_by)
+          VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
+          """,
+          (
+              tracking.support_case_id,
+              tracking.description,
+              tracking.affected_table,
+              tracking.affected_column,
+              tracking.affected_row_id,
+              tracking.old_value,
+              tracking.new_value,
+              tracking.updated_by
+          )
+      )
+
+      tracking_id = cursor.fetchone()[0]
+      self.conn.commit()
+
+      return self.get_by_id(tracking_id)
+    
+  
+  def __del__(self):
+    self.conn.close()
