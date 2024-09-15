@@ -2,7 +2,7 @@ from config.db_connection import DBConnection
 from support_cases.domain.support_cases_repository import SupportCasesRepository
 from support_cases.domain.support_cases_entity import SupportCases, SupportCasesCreate
 
-class PostgreRepository(SupportCasesRepository):
+class SupportCasesPersistenceRepository(SupportCasesRepository):
     def __init__(self):
         self.conn = DBConnection().get_connection()
     

@@ -2,13 +2,13 @@ from fastapi import APIRouter, Depends
 
 from support_cases.domain.support_cases_entity import SupportCasesCreate
 from support_cases.application.support_cases_usecase import SupportCasesUseCase
-from .persistence.postgre_repository import PostgreRepository
+from .persistence.support_cases_persistence import SupportCasesPersistenceRepository
 from .support_cases_controller import SupportCasesController
 
 support_cases_router = APIRouter()
 
 def support_cases_controller():
-    repository = PostgreRepository()
+    repository = SupportCasesPersistenceRepository()
     usecase = SupportCasesUseCase(repository)
     return SupportCasesController(usecase)
 
