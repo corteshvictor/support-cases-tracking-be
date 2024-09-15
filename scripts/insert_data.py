@@ -22,22 +22,22 @@ def insert_sample_data():
         """,
         """
         INSERT INTO tracking (
-            support_case_id, description, affected_table, affected_column, old_value, new_value, affected_row_id, updated_by
+            support_case_id, description, affected_table, affected_column, affected_row_id, old_value, new_value, updated_by
         ) VALUES
             (1, 'Initial schema setup', 'users', NULL, NULL, NULL, NULL, 'admin'),
             (2, 'Added email column', 'users', 'email', NULL, NULL, NULL, 'admin'),
             (3, 'Indexed order_date', 'orders', 'order_date', NULL, NULL, NULL, 'admin'),
             (4, 'Foreign key constraint added', 'products', 'category_id', NULL, NULL, NULL, 'admin'),
             (5, 'Date of birth column added', 'employees', 'date_of_birth', NULL, NULL, NULL, 'admin'),
-            (6, 'Removed old_field', 'sales', 'old_field', 'old_value', NULL, NULL, 'admin'),
+            (6, 'Removed old_field', 'sales', 'old_field', NULL, 'old_value', NULL, 'admin'),
             (7, 'Index added to logs table', 'logs', 'timestamp', NULL, NULL, NULL, 'admin'),
             (8, 'Updated customer data procedure', 'customer_data', NULL, NULL, NULL, NULL, 'admin'),
-            (9, 'Default value for status changed', 'orders', 'status', 'Shipped', 'Pending', NULL, 'admin'),
+            (9, 'Default value for status changed', 'orders', 'status', NULL, 'Shipped', 'Pending', 'admin'),
             (10, 'Created sales report view', 'sales', NULL, NULL, NULL, NULL, 'admin'),
             (11, 'Archived old transactions', 'transactions', NULL, NULL, NULL, NULL, 'admin'),
             (12, 'Modified audit trigger function', 'audit', NULL, NULL, NULL, NULL, 'admin'),
             (13, 'Added foreign key to orders table', 'orders', 'customer_id', NULL, NULL, NULL, 'admin'),
             (14, 'Added payment_method column', 'payments', 'payment_method', NULL, NULL, NULL, 'admin'),
-            (15, 'Removed obsolete inventory data', 'inventory', NULL, 'old_value', NULL, NULL, 'admin');
+            (15, 'Removed obsolete inventory data', 'inventory', NULL, NULL, 'old_value', NULL, 'admin');
         """
     ]
