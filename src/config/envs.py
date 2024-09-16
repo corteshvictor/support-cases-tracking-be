@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     DB_PASSWORD: str
     DB_HOST: str = "localhost"
     DB_PORT: int = 5432
+    BASE_URL: str
 
     model_config = SettingsConfigDict(env_file="src/.env")
 
