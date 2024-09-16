@@ -1,0 +1,110 @@
+dame un ejemplo en fastAPI donde tengo un archivo de rutas y quiero llamar los metodos de una clase Controller de otro archivo con injección de dependencia
+
+GitHub Copilot
+Primero, necesitas definir una clase Controller en un archivo separado, por ejemplo, support_cases_controller.py. Luego, puedes usar la inyección de dependencias de FastAPI para llamar a los métodos de esta clase desde tu archivo de rutas.
+
+Paso 1: Definir la clase Controller en support_cases_controller.py
+
+# support_cases_controller.py
+from typing import List
+
+class SupportCaseController:
+    def get_all_support_cases(self) -> List[dict]:
+        return [{"id": 1, "description": "Case 1"}, {"id": 2, "description": "Case 2"}]
+
+    def get_by_id_support_case(self, id: int) -> dict:
+        return {"id": id, "description": f"Case {id}"}
+
+Paso 2: Usar la clase Controller en el archivo de rutas support_cases_routes.py con inyección de dependencias
+
+# support_cases_routes.py
+from fastapi import APIRouter, Depends
+from support_cases_controller import SupportCaseController
+
+support_case_router = APIRouter()
+
+def get_support_case_controller():
+    return SupportCaseController()
+
+@support_case_router.get("/")
+def get_all_support_cases(controller: SupportCaseController = Depends(get_support_case_controller)):
+    return controller.get_all_support_cases()
+
+@support_case_router.get("/{id}")
+def get_by_id_support_case(id: int, controller: SupportCaseController = Depends(get_support_case_controller)):
+    return controller.get_by_id_support_case(id)
+
+Paso 3: Incluir el router en tu aplicación principal
+
+# main.py
+from fastapi import FastAPI
+from support_cases_routes import support_case_router
+
+app = FastAPI()
+
+app.include_router(support_case_router, prefix="/support-cases")
+
+En este ejemplo, SupportCaseController define los métodos para obtener los casos de soporte. En support_cases_routes.py, se usa la función Depends de FastAPI para inyectar una instancia de SupportCaseController en las rutas. Finalmente, en main.py, se incluye el router en la aplicación FastAPI.
+
+ME:
+python me permite hacer destructuring de un objeto? como se hace es javascript?
+
+result = { total_count: 'total_count', total_pages: 'total_pages', data: 'data' }
+
+{total_count, total_pages, page, data} = result
+
+GitHub Copilot
+En Python, no puedes hacer destructuring de un diccionario de la misma manera que en JavaScript. Sin embargo, puedes acceder a los valores del diccionario asignándolos a variables individuales. Aquí tienes un ejemplo de cómo hacerlo:
+result = {
+    "total_count": total_count,
+    "total_pages": total_pages,
+    "page": page,
+    "data": cursor.fetchall()
+}
+
+total_count = result["total_count"]
+total_pages = result["total_pages"]
+page = result["page"]
+data = result["data"]
+
+Si prefieres una forma más compacta, puedes usar el método itemgetter del módulo operator para obtener múltiples valores a la vez:
+
+from operator import itemgetter
+
+total_count, total_pages, page, data = itemgetter("total_count", "total_pages", "page", "data")(result)
+
+Ambas formas te permiten extraer los valores del diccionario y asignarlos a variables individuales.
+
+ME:
+Los enum pueden ser opcionales se crean con un valor por defecto. Utiliza typing
+
+from pydantic import BaseModel, Field
+from enum import Enum
+from datetime import datetime
+from typing import Optional
+
+class PriorityEnum(str, Enum):
+    low = "Low"
+    medium = "Medium"
+    high = "High"
+    critical = "Critical"
+
+class StatusEnum(str, Enum):
+    open = "Open"
+    in_progress = "In Progress"
+    resolved = "Resolved"
+    closed = "Closed"
+
+class SupportCasesCreate(BaseModel):
+    number: str
+    description: str
+    status: Optional[StatusEnum] = Field(default=StatusEnum.open)
+    priority: Optional[PriorityEnum] = Field(default=PriorityEnum.low)
+    database_name: str
+    schema_name: str
+    query_executed: str
+    executed_by: str
+    requester: str
+
+    En este ejemplo, status y priority son opcionales y tienen valores por defecto (StatusEnum.open y PriorityEnum.low, respectivamente). Esto se logra usando Optional de typing y Field de Pydantic para establecer los valores por defecto.
+    
