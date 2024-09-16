@@ -26,7 +26,16 @@ Este sistema utiliza **FastAPI** como framework web y **PostgreSQL** como base d
 git clone https://github.com/corteshvictor/support-case-tracking-be.git
 ```
 
-2. Instala las dependencias del proyecto utilizando el archivo `requirements.txt`:
+2. Crear un entorno virtual para gestionar las dependencias:
+
+```bash
+python -m venv .venv
+source .venv/env/bin/activate
+```
+
+**Nota:** Mayor información https://fastapi.tiangolo.com/virtual-environments/
+
+3. Instala las dependencias del proyecto utilizando el archivo `requirements.txt`:
 
 ```bash
 pip install -r requirements.txt
