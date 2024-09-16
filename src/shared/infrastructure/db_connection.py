@@ -1,5 +1,5 @@
 import psycopg
-from .envs import envs
+from config.envs import envs
 
 class DBConnection:
     def __init__(self):
