@@ -16,15 +16,15 @@ class StatusEnum(str, Enum):
     closed = "Closed"
 
 class SupportCasesCreate(BaseModel):
-    number: str
+    number: str = Field(max_length=15)
     description: str
     status: Optional[StatusEnum] = Field(default=StatusEnum.open)
     priority: Optional[PriorityEnum] = Field(default=PriorityEnum.medium)
-    database_name: str
-    schema_name: str
+    database_name: str = Field(max_length=63)
+    schema_name: str = Field(max_length=63)
     query_executed: str
-    executed_by: str
-    requester: str
+    executed_by: str = Field(max_length=50)
+    requester: str = Field(max_length=50)
 
 class SupportCases(BaseModel):
     id: int

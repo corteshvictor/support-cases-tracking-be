@@ -1,5 +1,5 @@
 from typing import Optional
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Path, Query
 
 from support_cases.domain.support_cases_entity import PriorityEnum, StatusEnum, SupportCasesCreate, SupportCasesFilter
 from support_cases.application.support_cases_usecase import SupportCasesUseCase
@@ -37,7 +37,7 @@ def get_all_support_cases(
     return controller.get_all_support_cases(filters)
 
 @support_cases_router.get("/{id}")
-def get_by_id_support_case(id: int, controller: SupportCasesController = Depends(support_cases_controller)):
+def get_by_id_support_case(id: int = Path(gt=0), controller: SupportCasesController = Depends(support_cases_controller)):
     return controller.get_support_case_by_id(id)
 
 @support_cases_router.post("/")

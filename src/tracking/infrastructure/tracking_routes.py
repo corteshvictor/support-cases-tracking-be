@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Path
 
 from tracking.domain.tracking_entity import TrackingCreate
 from tracking.application.tracking_usecase import TrackingUseCase
@@ -17,7 +17,7 @@ def get_all_tracking(controller: TrackingController = Depends(tracking_controlle
     return controller.get_all_tracking()
 
 @tracking_router.get("/{id}")
-def get_by_id_tracking(id: int, controller: TrackingController = Depends(tracking_controller)):
+def get_by_id_tracking(id: int = Path(gt=0), controller: TrackingController = Depends(tracking_controller)):
     return controller.get_tracking_by_id(id)
 
 @tracking_router.post("/")
