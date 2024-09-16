@@ -90,6 +90,7 @@ class SupportCasesPersistenceRepository(SupportCasesRepository):
         cursor.execute(
             "SELECT * FROM support_cases WHERE id = %s", (id,)
         )
+        return cursor.fetchone()
     
     def __del__(self):
         self.conn.close()
