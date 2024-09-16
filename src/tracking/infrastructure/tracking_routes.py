@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Path
+from fastapi import APIRouter, Depends, Path, status
 
 from tracking.domain.tracking_entity import TrackingCreate
 from tracking.application.tracking_usecase import TrackingUseCase
@@ -20,6 +20,6 @@ def get_all_tracking(controller: TrackingController = Depends(tracking_controlle
 def get_by_id_tracking(id: int = Path(gt=0), controller: TrackingController = Depends(tracking_controller)):
     return controller.get_tracking_by_id(id)
 
-@tracking_router.post("/")
+@tracking_router.post("/", status_code=status.HTTP_201_CREATED)
 def create_tracking(tracking: TrackingCreate, controller: TrackingController = Depends(tracking_controller)):
     return controller.create_tracking(tracking)
