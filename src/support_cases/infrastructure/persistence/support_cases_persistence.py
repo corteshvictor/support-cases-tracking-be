@@ -1,6 +1,6 @@
-from config.db_connection import DBConnection
+from shared.infrastructure.db_connection import DBConnection
 from support_cases.domain.support_cases_repository import SupportCasesRepository
-from support_cases.domain.support_cases_entity import SupportCases, SupportCasesCreate
+from support_cases.domain.support_cases_entity import SupportCases, SupportCasesCreate, SupportCasesFilter
 
 class SupportCasesPersistenceRepository(SupportCasesRepository):
     def __init__(self):
@@ -31,37 +31,65 @@ class SupportCasesPersistenceRepository(SupportCasesRepository):
 
             return self.get_by_id(support_case_id)
 
-    def get_all(self, page: int = 1, page_size: int = 10) -> dict:
+    def get_all(self, filters: SupportCasesFilter) -> dict:
         cursor = self.conn.cursor()
+        PAGE_SIZE = 10
 
-        offset = (page - 1) * page_size
-        cursor.execute("SELECT COUNT(*) FROM support_cases")
+        # Base query with filters
+        query = """
+            SELECT * FROM support_cases WHERE 1=1
+        """
+        params = []
+
+        # Apply filters
+        if filters.status:
+            query += " AND status = %s"
+            params.append(filters.status.value)
+        if filters.priority:
+            query += " AND priority = %s"
+            params.append(filters.priority.value)
+        if filters.description:
+            query += " AND description ILIKE %s"
+            params.append(f"%{filters.description}%")
+        if filters.database_name:
+            query += " AND database_name ILIKE %s"
+            params.append(f"%{filters.database_name}%")
+        if filters.requester:
+            query += " AND requester ILIKE %s"
+            params.append(f"%{filters.requester}%")
+        if filters.executed_by:
+            query += " AND executed_by ILIKE %s"
+            params.append(f"%{filters.executed_by}%")
+
+        # Calculate total_count
+        count_query = f"SELECT COUNT(*) FROM ({query}) AS subquery"
+        cursor.execute(count_query, params)
         total_count = cursor.fetchone()[0]
-        total_pages = (total_count + page_size - 1) // page_size
 
-        cursor.execute(
-            """
-            SELECT * FROM support_cases
+        # Apply pagination
+        paginated_query = f"""
+            {query}
             ORDER BY id
             LIMIT %s OFFSET %s
-            """, 
-            (page_size, offset)
-        )
+        """
+        params.extend([PAGE_SIZE, (filters.page - 1) * PAGE_SIZE])
+
+        # Execute paginated query
+        cursor.execute(paginated_query, params)
+        rows = cursor.fetchall()
+        total_pages = (total_count + PAGE_SIZE - 1) // PAGE_SIZE
 
         return {
             "total_count": total_count,
             "total_pages": total_pages,
-            "page": page,
-            "data": cursor.fetchall()
+            "data": rows # exclude the last row containing total_count
         }
-    
+
     def get_by_id(self, id: int) -> list:
         cursor = self.conn.cursor()
         cursor.execute(
             "SELECT * FROM support_cases WHERE id = %s", (id,)
         )
-        
-        return cursor.fetchone()
     
     def __del__(self):
         self.conn.close()

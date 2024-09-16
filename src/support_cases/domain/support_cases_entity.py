@@ -39,3 +39,12 @@ class SupportCases(BaseModel):
     requester: str
     created_at: datetime
     updated_at: datetime
+    
+class SupportCasesFilter(BaseModel):
+    page: int = 1
+    status: Optional[StatusEnum] = None
+    priority: Optional[PriorityEnum] = None
+    description: Optional[str] = None
+    database_name: Optional[str] = None
+    requester: Optional[str] = None
+    executed_by: Optional[str] = None

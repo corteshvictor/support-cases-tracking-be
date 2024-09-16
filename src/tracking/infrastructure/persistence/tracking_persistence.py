@@ -1,4 +1,4 @@
-from config.db_connection import DBConnection
+from shared.infrastructure.db_connection import DBConnection
 from tracking.domain.tracking_entity import Tracking, TrackingCreate
 from tracking.domain.tracking_repository import TrackingRepository
 

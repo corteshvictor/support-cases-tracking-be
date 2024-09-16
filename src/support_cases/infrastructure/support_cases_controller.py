@@ -14,12 +14,12 @@ class SupportCasesController:
       return map_to_support_cases(result)
     raise HTTPException(status_code=404, detail="Support case not found")
   
-  def get_all_support_cases(self):
-    result = self.usecase.get_all_support_cases()
+  def get_all_support_cases(self, filters):
+    result = self.usecase.get_all_support_cases(filters)
 
     count = result["total_count"]
     pages = result["total_pages"]
-    page = result["page"]
+    page = filters.page
     data = result["data"]
 
     return {

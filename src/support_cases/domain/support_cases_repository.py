@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from support_cases.domain.support_cases_entity import SupportCases, SupportCasesCreate
+from support_cases.domain.support_cases_entity import SupportCases, SupportCasesCreate, SupportCasesFilter
 from typing import List
 
 class SupportCasesRepository(ABC):
@@ -8,7 +8,7 @@ class SupportCasesRepository(ABC):
         pass
 
     @abstractmethod
-    def get_all(self) -> List[SupportCases]:
+    def get_all(self, filters: SupportCasesFilter) -> List[SupportCases]:
         pass
 
     @abstractmethod
