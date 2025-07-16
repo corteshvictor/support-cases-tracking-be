@@ -1,5 +1,7 @@
 # Support Case Tracking Back-end
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/corteshvictor/support-cases-tracking-be)
+
 Este proyecto es un sistema de backend que permite llevar la trazabilidad de casos de soporte que implican acciones manuales en bases de datos transaccionales. Cada caso de soporte está relacionado con una solicitud que puede requerir modificaciones manuales en una base de datos externa. El sistema registra cada cambio realizado, almacenando información como la tabla afectada, la columna, los valores anteriores y nuevos, y quién realizó la modificación.
 
 ## Requerimiento
